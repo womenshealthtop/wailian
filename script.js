@@ -4,7 +4,7 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
     const url = document.getElementById('url').value;
     
     try {
-        const response = await fetch('https://wailian-2p3.pages.dev//submit', {
+        const response = await fetch('https://wailian-2p3.pages.dev/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url })

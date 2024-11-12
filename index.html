@@ -3,43 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网址列表</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 5px 0;
-        }
-    </style>
+    <title>自动收录网址</title>
 </head>
 <body>
-    <h1>已收录的网址列表</h1>
-    <ul>
-       <li><a href="https://www.womenshealth.top/">best workout routines for women at home</a></li>
-          <li><a href="https://www.womenshealth.top/">effective exercises for women to build strength</a></li>
-          <li><a href="https://www.womenshealth.top/">tips for staying motivated to exercise for women</a></li>
-          <li><a href="https://www.womenshealth.top/">how to create a balanced fitness plan for women</a></li>
-          <li><a href="https://www.womenshealth.top/">benefits of strength training for women</a></li>
-          <li><a href="https://www.womenshealth.top/">best cardio workouts for women</a></li>
-          <li><a href="https://www.womenshealth.top/">tips for starting a running program for women</a></li>
-          <li><a href="https://www.womenshealth.top/">effective stretches for women before and after workouts</a></li>
-          <li><a href="https://www.womenshealth.top/">how to choose the right fitness classes for women</a></li>
-          <li><a href="https://www.womenshealth.top/">best apps for tracking workouts for women</a></li>
-          <li><a href="https://www.womenshealth.top/">tips for improving flexibility for women</a></li>
-          <li><a href="https://www.womenshealth.top/">effective weight loss workouts for women</a></li>
-          <li><a href="https://www.womenshealth.top/">how to stay active during pregnancy for women</a></li>
-          <li><a href="https://www.womenshealth.top/">best exercises for toning arms for women</a></li>
-          <li><a href="https://www.womenshealth.top/">benefits of yoga for women’s health</a></li>
-    </ul>
+    <h1>自动收录网址</h1>
+
+    <!-- 提交网址表单 -->
+    <section>
+        <h2>提交您的网址</h2>
+        <form id="urlForm">
+            <label for="url">网址：</label>
+            <input type="url" id="url" name="url" required>
+            <button type="submit">提交</button>
+        </form>
+        <div id="response"></div>
+    </section>
+
+    <!-- 已收录的网址列表 -->
+    <section>
+        <h2>已收录的网址</h2>
+        <ul id="url-list"></ul>
+    </section>
+
+    <script>
+        // 提交网址表单的处理逻辑
+        document.getElementById('urlForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            
+            try {
+                const response = await fetch('https://wailian-2p3.pages.dev//submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const result = await response.json();
+                document.getElementById('response').textContent = result.message;
+
+                // 提交成功后，刷新网址列表
+                fetchUrls();
+            } catch (error) {
+                console.error('提交失败', error);
+            }
+        });
+
+        // 获取已收录的网址列表
+        async function fetchUrls() {
+            try {
+                const response = await fetch('https://wailian-2p3.pages.dev//urls');
+                const urls = await response.json();
+                
+                const urlList = document.getElementById('url-list');
+                urlList.innerHTML = '';  // 清空当前列表
+                urls.forEach(url => {
+                    const li = document.createElement('li');
+                    li.textContent = url;
+                    urlList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('获取网址列表失败', error);
+            }
+        }
+
+        // 页面加载时获取网址列表
+        window.onload = fetchUrls;
+    </script>
 </body>
 </html>
